@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.pekah.dto.AccessTokenDTO;
 import com.pekah.dto.GithubUser;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 @Component
 public class GithubProvider {
+
     public String getAccessToken(AccessTokenDTO accessTokenDTO){
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -20,8 +22,9 @@ public class GithubProvider {
                     .build();
             try (Response response = client.newCall(request).execute()) {
                 String string = response.body().string();
-                System.out.println(string);
-                return string;
+                String[] s1=string.split("&");
+                String[] s2=s1[0].split("=");
+                return s2[1];
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -1,8 +1,10 @@
 package com.pekah.controller;
 
 import com.pekah.dto.AccessTokenDTO;
+import com.pekah.dto.GithubUser;
 import com.pekah.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,16 +15,29 @@ public class AuthorizeController {
     @Autowired
     private GithubProvider githubProvider;
 
+
+    @Value("${AccessTokenDTO.client.id}")
+    private String client_id;
+    @Value("${AccessTokenDTO.client.secret}")
+    private String client_secret;
+    @Value("${AccessTokenDTO.redirect.uri}")
+    private String redirect_uri;
+
+
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code")String code,
                             @RequestParam(name="state")String state) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
-        accessTokenDTO.setClient_id("a60788f8a953b9efbd67");
-        accessTokenDTO.setClient_secret("16e0e7d77edbd2d5d639bbf3e0d8b56e4b81a1a3");
+        accessTokenDTO.setClient_id(client_id);
+        accessTokenDTO.setClient_secret(client_secret);
         accessTokenDTO.setCode(code);
-        accessTokenDTO.setRedirect_uri("http://localhost:8080/callback");
+        accessTokenDTO.setRedirect_uri(redirect_uri);
         accessTokenDTO.setState(state);
-        githubProvider.getAccessToken(accessTokenDTO);
+        String Token = githubProvider.getAccessToken(accessTokenDTO);
+        GithubUser user= githubProvider.getGithubUser(Token);
+        System.out.println(user.getLogin());
+        System.out.println(user.getId());
+        System.out.println(user.getBio());
         return "index";
     }
 }
