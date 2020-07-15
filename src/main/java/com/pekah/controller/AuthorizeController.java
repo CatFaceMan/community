@@ -16,13 +16,13 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code")String code,
                             @RequestParam(name="state")String state) {
-        /*AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
+        AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id("a60788f8a953b9efbd67");
         accessTokenDTO.setClient_secret("16e0e7d77edbd2d5d639bbf3e0d8b56e4b81a1a3");
         accessTokenDTO.setCode(code);
-        accessTokenDTO.setRedirect_uri("https://github.com/login/oauth/authorize");
+        accessTokenDTO.setRedirect_uri("http://localhost:8080/callback");
         accessTokenDTO.setState(state);
-        githubProvider.getAccessToken(accessTokenDTO);*/
+        githubProvider.getAccessToken(accessTokenDTO);
         return "index";
     }
 }

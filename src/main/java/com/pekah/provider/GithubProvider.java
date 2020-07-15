@@ -19,8 +19,9 @@ public class GithubProvider {
                     .post(body)
                     .build();
             try (Response response = client.newCall(request).execute()) {
-                System.out.println(response.body().string());
-                return response.body().string();
+                String string = response.body().string();
+                System.out.println(string);
+                return string;
             } catch (IOException e) {
                 e.printStackTrace();
             }
