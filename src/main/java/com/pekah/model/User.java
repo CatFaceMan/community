@@ -3,10 +3,27 @@ package com.pekah.model;
 public class User {
     private Integer id;
     private String accountId;
-    private String name;
+    private String login;
     private String token;
     private String gmtCreate;
     private String gmtModified;
+    private String bio;
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
 
     public Integer getId() {
         return id;
@@ -22,14 +39,6 @@ public class User {
 
     public void setAccountId(String accountId) {
         this.accountId = accountId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getToken() {
