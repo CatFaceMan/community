@@ -1,0 +1,18 @@
+body{
+    background-color: #efefef;
+}
+
+.main{
+    background-color: white;
+    margin: 30px;
+}
+
+#btn1{
+    margin-bottom: 15px;
+}
+
+#span1{
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}

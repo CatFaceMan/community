@@ -32,12 +32,12 @@ public class AuthorizeController {
     @Value("${AccessTokenDTO.redirect.uri}")
     private String redirect_uri;
 
-    @Autowired(required=false)
+    @Autowired(required = false)
     private UserMapper userMapper;
 
     @GetMapping("/callback")
-    public String callback(@RequestParam(name="code")String code,
-                           @RequestParam(name="state")String state, HttpServletResponse resp) throws IOException {
+    public String callback(@RequestParam(name = "code") String code,
+                           @RequestParam(name = "state") String state, HttpServletResponse resp) throws IOException {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(client_id);
         accessTokenDTO.setClient_secret(client_secret);
@@ -45,22 +45,26 @@ public class AuthorizeController {
         accessTokenDTO.setRedirect_uri(redirect_uri);
         accessTokenDTO.setState(state);
         String Token = githubProvider.getAccessToken(accessTokenDTO);
-        GithubUser githubUser= githubProvider.getGithubUser(Token);
-        if(githubUser != null){
+        GithubUser githubUser = githubProvider.getGithubUser(Token);
+        if (githubUser != null) {
             User user = new User();
-            Date dNow = new Date( );
-            SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+            Date dNow = new Date();
+            SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             user.setGmtCreate(ft.format(dNow));
             user.setGmtModified(user.getGmtCreate());
-            user.setAccountId(String.valueOf(githubUser.getId()));
+            user.setAccountId(githubUser.getId());
             user.setLogin(githubUser.getLogin());
             String token = UUID.randomUUID().toString();
             user.setToken(token);
-            userMapper.insert(user);
-            resp.addCookie(new Cookie("token",token));
+            user.setAvatarUrl(githubUser.getAvatarUrl());
+            user.setBio(githubUser.getBio());
+            User byId = userMapper.findById(githubUser.getId());
+            if(byId==null){
+                userMapper.insert(user);
+            }
+            resp.addCookie(new Cookie("token", token));
             return "redirect:/";
-        }
-        else{
+        } else {
             return "redirect:/";
         }
     }
