@@ -61,8 +61,9 @@ public class AuthorizeController {
             User byId = userMapper.findById(githubUser.getId());
             if(byId==null){
                 userMapper.insert(user);
+                resp.addCookie(new Cookie("token", token));
             }
-            resp.addCookie(new Cookie("token", token));
+
             return "redirect:/";
         } else {
             return "redirect:/";
